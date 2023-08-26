@@ -66,6 +66,7 @@ dependencies {
     implementation(libs.coil)
     implementation(libs.com.google.dagger.hilt.android)
     kapt(libs.com.google.dagger.hilt.android.complier)
+    implementation(libs.androidx.swiperefreshlayout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)

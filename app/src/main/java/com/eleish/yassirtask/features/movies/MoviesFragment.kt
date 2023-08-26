@@ -29,14 +29,23 @@ class MoviesFragment : BindingFragment<FragmentMoviesBinding>() {
 
         observeLiveData()
         setupRecyclerView()
+        setupSwipeRefresh()
     }
 
     private fun setupRecyclerView() {
         binding.moviesRv.addOnBottomReachedListener {
-            Log.d("MoviesFragment", "End of RV reached")
+            Log.d(MoviesFragment::class.java.simpleName, "End of RV reached")
             viewModel.fetchMovies()
         }
         binding.moviesRv.adapter = moviesAdapter
+    }
+
+    private fun setupSwipeRefresh() {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            binding.swipeRefreshLayout.isRefreshing = false
+            viewModel.clearMovies()
+            viewModel.fetchMovies()
+        }
     }
 
     private fun observeLiveData() {
@@ -55,6 +64,10 @@ class MoviesFragment : BindingFragment<FragmentMoviesBinding>() {
     }
 
     private fun onMovieClicked(movie: Movie) {
-        findNavController().navigate(MoviesFragmentDirections.actionMoviesFragmentToMovieDetailsFragment(movie))
+        findNavController().navigate(
+            MoviesFragmentDirections.actionMoviesFragmentToMovieDetailsFragment(
+                movie
+            )
+        )
     }
 }

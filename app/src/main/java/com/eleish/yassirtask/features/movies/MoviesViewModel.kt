@@ -9,6 +9,7 @@ import com.eleish.domain.usecases.GetMoviesUseCase
 import com.eleish.entities.Movie
 import com.eleish.entities.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,6 +31,11 @@ class MoviesViewModel @Inject constructor(
 
     init {
         fetchMovies()
+    }
+
+    fun clearMovies() {
+        page = 1
+        _movies.postValue(emptyList())
     }
 
     fun fetchMovies() {
