@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.eleish.entities.Movie
+import com.eleish.entities.PosterSize
 import com.eleish.yassirtask.databinding.ItemMovieBinding
 
 class MoviesAdapter(private val onItemClicked: (Movie) -> Unit) :
@@ -25,7 +26,7 @@ class MoviesAdapter(private val onItemClicked: (Movie) -> Unit) :
             movieTitleTv.text = movie.title
             releaseYearTv.text = movie.releaseYear.toString()
             ratingRb.rating = movie.rating
-            moviePosterIv.load(data = movie.posterUrl)
+            moviePosterIv.load(data = movie.getPosterUrl(PosterSize.MEDIUM))
 
             root.setOnClickListener {
                 onItemClicked.invoke(movie)

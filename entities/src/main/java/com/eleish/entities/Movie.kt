@@ -8,5 +8,11 @@ data class Movie(
     val releaseYear: Int,
     val rating: Float,
     val overview: String,
-    val posterUrl: String
-): Serializable
+    private val posterBaseUrl: String,
+    private val posterPath: String
+) : Serializable {
+
+    fun getPosterUrl(posterSize: PosterSize): String {
+        return "$posterBaseUrl${posterSize.code}$posterPath"
+    }
+}

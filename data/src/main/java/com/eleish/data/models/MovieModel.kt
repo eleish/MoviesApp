@@ -26,11 +26,12 @@ fun MovieModel.toMovie(): Movie {
     }.get(Calendar.YEAR)
     val rating = voteAverage / 2f // To convert from 10 to 5 stars
     return Movie(
-        id,
-        title,
-        releaseYear,
-        rating,
-        overview,
-        "https://image.tmdb.org/t/p/w500$posterPath" // TODO: Implement full poster url building
+        id = id,
+        title = title,
+        releaseYear = releaseYear,
+        rating = rating,
+        overview = overview,
+        posterBaseUrl = "https://image.tmdb.org/t/p/",
+        posterPath = "/$posterPath" // TODO: Implement full poster url building
     )
 }

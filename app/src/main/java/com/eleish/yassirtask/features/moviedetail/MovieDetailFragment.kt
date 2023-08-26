@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.navArgs
 import coil.load
+import com.eleish.entities.PosterSize
 import com.eleish.yassirtask.core.BindingFragment
 import com.eleish.yassirtask.databinding.FragmentMovieDetailBinding
 
@@ -29,7 +30,7 @@ class MovieDetailFragment : BindingFragment<FragmentMovieDetailBinding>() {
             releaseYearTv.text = movie.releaseYear.toString()
             ratingRb.rating = movie.rating
             overviewTv.text = movie.overview
-            moviePosterIv.load(movie.posterUrl)
+            moviePosterIv.load(movie.getPosterUrl(PosterSize.ORIGINAL))
         }
     }
 }
