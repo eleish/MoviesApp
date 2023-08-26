@@ -1,5 +1,6 @@
 package com.eleish.data.models
 
+import com.eleish.data.core.di.Constants
 import com.eleish.entities.Movie
 import com.google.gson.annotations.SerializedName
 import java.util.Calendar
@@ -31,7 +32,7 @@ fun MovieModel.toMovie(): Movie {
         releaseYear = releaseYear,
         rating = rating,
         overview = overview,
-        posterBaseUrl = "https://image.tmdb.org/t/p/",
-        posterPath = "/$posterPath" // TODO: Implement full poster url building
+        posterBaseUrl = Constants.POSTER_BASE_URL,
+        posterPath = "/$posterPath"
     )
 }
