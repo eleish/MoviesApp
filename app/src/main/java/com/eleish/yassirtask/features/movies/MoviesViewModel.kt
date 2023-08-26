@@ -8,6 +8,7 @@ import com.eleish.domain.usecases.GetMoviesParams
 import com.eleish.domain.usecases.GetMoviesUseCase
 import com.eleish.entities.Movie
 import com.eleish.entities.Result
+import com.eleish.yassirtask.core.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,7 +21,8 @@ class MoviesViewModel @Inject constructor(
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> = _loading
 
-    private val _error = MutableLiveData<String>()
+    // TODO: Consider replacing with MutableSharedFLow
+    private val _error = SingleLiveEvent<String>()
     val error: LiveData<String> = _error
 
     private val _movies = MutableLiveData<List<Movie>>()
