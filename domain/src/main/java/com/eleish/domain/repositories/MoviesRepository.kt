@@ -1,10 +1,11 @@
 package com.eleish.domain.repositories
 
 import com.eleish.entities.Movie
+import com.eleish.entities.MoviesPage
 import com.eleish.entities.Result
 
 interface MoviesRepository {
 
-    suspend fun getMovies(): Result<List<Movie>>
+    suspend fun getMovies(page: Int): Result<MoviesPage>
     suspend fun getMovie(id: Int): Result<Movie>
 }

@@ -22,7 +22,7 @@
             app:layout_constraintWidth_percent="0.3" />
 
         <TextView
-            android:id="@+id/movie_name_tv"
+            android:id="@+id/movie_title_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_normal"
@@ -32,14 +32,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/movie_poster_iv"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Movie Name Appears Here" />
+            tools:text="Movie Title Appears Here" />
 
         <TextView
             android:id="@+id/release_year_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/movie_name_tv"
-            app:layout_constraintTop_toBottomOf="@id/movie_name_tv"
+            app:layout_constraintStart_toStartOf="@id/movie_title_tv"
+            app:layout_constraintTop_toBottomOf="@id/movie_title_tv"
             tools:text="1996" />
 
         <RatingBar
@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_normal"
             android:progressTint="@color/golden"
-            app:layout_constraintStart_toStartOf="@id/movie_name_tv"
+            app:layout_constraintStart_toStartOf="@id/movie_title_tv"
             app:layout_constraintTop_toBottomOf="@id/release_year_tv"
             tools:rating="5" />
     </androidx.constraintlayout.widget.ConstraintLayout>

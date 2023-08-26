@@ -22,7 +22,7 @@ class MoviesAdapter(private val onItemClicked: (Movie) -> Unit) :
         val movie = getItem(position)
 
         with(holder.binding) {
-            movieNameTv.text = movie.name
+            movieTitleTv.text = movie.title
             releaseYearTv.text = movie.releaseYear.toString()
             ratingRb.rating = movie.rating
             moviePosterIv.load(data = movie.posterUrl)
