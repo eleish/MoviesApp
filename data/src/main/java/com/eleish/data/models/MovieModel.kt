@@ -28,6 +28,6 @@ fun MovieModel.toMovie(): Movie {
         title,
         releaseYear,
         rating,
-        posterPath // TODO: Implement full poster url building
+        "https://image.tmdb.org/t/p/w500$posterPath" // TODO: Implement full poster url building
     )
 }
