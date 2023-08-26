@@ -7,7 +7,7 @@ import com.eleish.entities.MoviesPage
 import com.eleish.entities.Result
 import javax.inject.Inject
 
-class MoviesRepositoryImpl @Inject constructor(
+internal class MoviesRepositoryImpl @Inject constructor(
     private val moviesRemoteDataSource: MoviesRemoteDataSource
 ) : MoviesRepository {
     override suspend fun getMovies(page: Int): Result<MoviesPage> {

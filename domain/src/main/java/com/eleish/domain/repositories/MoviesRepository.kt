@@ -1,6 +1,5 @@
 package com.eleish.domain.repositories
 
-import com.eleish.entities.Movie
 import com.eleish.entities.MoviesPage
 import com.eleish.entities.Result
 

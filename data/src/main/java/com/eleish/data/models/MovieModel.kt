@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
 import java.util.Calendar
 import java.util.Date
 
-data class MovieModel(
+internal data class MovieModel(
     @SerializedName("id")
     val id: Int,
     @SerializedName("title")
@@ -21,7 +21,7 @@ data class MovieModel(
     val posterPath: String
 )
 
-fun MovieModel.toMovie(): Movie {
+internal fun MovieModel.toMovie(): Movie {
     val releaseYear = Calendar.getInstance().apply {
         time = releaseDate
     }.get(Calendar.YEAR)

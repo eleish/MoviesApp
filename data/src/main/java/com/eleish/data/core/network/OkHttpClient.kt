@@ -9,7 +9,7 @@ import okhttp3.Route
 import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit
 
-object OkHttpClient {
+internal object OkHttpClient {
 
     fun newInstance(authToken: String): OkHttpClient {
         val loggingInterceptor = HttpLoggingInterceptor { message ->
