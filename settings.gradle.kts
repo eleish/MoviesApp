@@ -15,4 +15,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "Yassir Task"
 include(":app")
- 
+include(":domain")
+include(":entities")
+include(":data")

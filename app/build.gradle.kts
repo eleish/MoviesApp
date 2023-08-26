@@ -49,6 +49,9 @@ android {
 
 dependencies {
 
+    implementation(project(":domain")) // TODO: Could this be added to the version catalog?
+    implementation(project(":data")) // TODO: Remove after adding HILT DI
+
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.appcompat)
@@ -56,6 +59,7 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.extensions)
+    implementation(libs.coil)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
