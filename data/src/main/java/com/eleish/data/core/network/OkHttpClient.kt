@@ -29,7 +29,8 @@ internal object OkHttpClient {
                     if (response.request.header("Authorization") != null)
                         return null
 
-                    return response.request.newBuilder().header("Authorization", "Bearer $authToken")
+                    return response.request.newBuilder()
+                        .header("Authorization", "Bearer $authToken")
                         .build()
                 }
             })

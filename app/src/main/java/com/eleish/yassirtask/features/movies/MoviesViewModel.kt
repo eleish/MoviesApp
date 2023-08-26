@@ -9,7 +9,6 @@ import com.eleish.domain.usecases.GetMoviesUseCase
 import com.eleish.entities.Movie
 import com.eleish.entities.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
