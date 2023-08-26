@@ -16,6 +16,7 @@ import com.eleish.entities.Movie
 import com.eleish.yassirtask.R
 import com.eleish.yassirtask.core.BindingFragment
 import com.eleish.yassirtask.core.addOnBottomReachedListener
+import com.eleish.yassirtask.core.isNetworkAvailable
 import com.eleish.yassirtask.core.showLongToast
 import com.eleish.yassirtask.databinding.FragmentMoviesBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,9 +37,9 @@ class MoviesFragment : BindingFragment<FragmentMoviesBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        wasPreviouslyConnected = isNetworkAvailable()
+        wasPreviouslyConnected = context?.isNetworkAvailable() ?: false
     }
-    
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -100,28 +101,17 @@ class MoviesFragment : BindingFragment<FragmentMoviesBinding>() {
                 if (wasPreviouslyConnected) {
                     return
                 }
-                context?.showLongToast(getString(R.string.network_restored))
+                context?.showLongToast(R.string.network_restored)
                 viewModel.fetchMovies()
             }
 
             override fun onLost(network: Network) {
                 super.onLost(network)
-                context?.showLongToast(getString(R.string.no_internet_connection))
+                context?.showLongToast(R.string.no_internet_connection)
                 wasPreviouslyConnected = false
             }
         }.also {
             connectivityManager.registerNetworkCallback(networkRequest, it)
-        }
-    }
-
-    private fun isNetworkAvailable(): Boolean {
-        val network = connectivityManager.activeNetwork ?: return false
-        val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
-
-        return when {
-            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-            else -> false
         }
     }
 
