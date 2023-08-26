@@ -14,7 +14,9 @@ import com.eleish.yassirtask.core.BindingFragment
 import com.eleish.yassirtask.core.addOnBottomReachedListener
 import com.eleish.yassirtask.core.showLongToast
 import com.eleish.yassirtask.databinding.FragmentMoviesBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MoviesFragment : BindingFragment<FragmentMoviesBinding>() {
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentMoviesBinding
         get() = FragmentMoviesBinding::inflate

@@ -4,16 +4,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.eleish.data.repositories.MoviesRepositoryImpl
 import com.eleish.domain.usecases.GetMoviesParams
 import com.eleish.domain.usecases.GetMoviesUseCase
 import com.eleish.entities.Movie
-import com.eleish.entities.None
 import com.eleish.entities.Result
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MoviesViewModel(
-    private val getMoviesUseCase: GetMoviesUseCase = GetMoviesUseCase(MoviesRepositoryImpl())
+@HiltViewModel
+class MoviesViewModel @Inject constructor(
+    private val getMoviesUseCase: GetMoviesUseCase
 ) : ViewModel() {
 
     private val _loading = MutableLiveData<Boolean>()

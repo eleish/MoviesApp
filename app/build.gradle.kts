@@ -2,7 +2,9 @@
 plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
+    alias(libs.plugins.org.jetbrains.kotlin.kapt)
     alias(libs.plugins.androidx.navigation.safeargs.kotlin)
+    alias(libs.plugins.com.google.dagger.hilt.android)
 }
 
 android {
@@ -51,8 +53,8 @@ android {
 dependencies {
 
     implementation(project(":domain")) // TODO: Could this be added to the version catalog?
-    implementation(project(":data")) // TODO: Remove after adding HILT DI
-    implementation(project(":entities")) // TODO: Remove after adding HILT DI
+    implementation(project(":data"))
+    implementation(project(":entities"))
 
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
@@ -62,6 +64,8 @@ dependencies {
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.extensions)
     implementation(libs.coil)
+    implementation(libs.com.google.dagger.hilt.android)
+    kapt(libs.com.google.dagger.hilt.android.complier)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)

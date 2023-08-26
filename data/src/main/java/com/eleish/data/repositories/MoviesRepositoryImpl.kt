@@ -1,16 +1,14 @@
 package com.eleish.data.repositories
 
 import com.eleish.data.datasources.MoviesRemoteDataSource
-import com.eleish.data.di.Provider
 import com.eleish.data.models.toMovie
 import com.eleish.domain.repositories.MoviesRepository
 import com.eleish.entities.MoviesPage
 import com.eleish.entities.Result
+import javax.inject.Inject
 
-class MoviesRepositoryImpl(
-    private val moviesRemoteDataSource: MoviesRemoteDataSource = Provider.retrofit.create(
-        MoviesRemoteDataSource::class.java
-    )
+class MoviesRepositoryImpl @Inject constructor(
+    private val moviesRemoteDataSource: MoviesRemoteDataSource
 ) : MoviesRepository {
     override suspend fun getMovies(page: Int): Result<MoviesPage> {
         return try {
