@@ -4,7 +4,6 @@ import com.eleish.data.datasources.MoviesRemoteDataSource
 import com.eleish.data.di.Provider
 import com.eleish.data.models.toMovie
 import com.eleish.domain.repositories.MoviesRepository
-import com.eleish.entities.Movie
 import com.eleish.entities.MoviesPage
 import com.eleish.entities.Result
 
@@ -21,9 +20,5 @@ class MoviesRepositoryImpl(
         } catch (e: Exception) {
             Result.Failure(e)
         }
-    }
-
-    override suspend fun getMovie(id: Int): Result<Movie> {
-        TODO("Not yet implemented")
     }
 }
