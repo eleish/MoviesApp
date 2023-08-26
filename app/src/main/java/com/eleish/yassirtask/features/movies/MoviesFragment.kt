@@ -1,5 +1,9 @@
 package com.eleish.yassirtask.features.movies
 
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -24,12 +28,23 @@ class MoviesFragment : BindingFragment<FragmentMoviesBinding>() {
     private val viewModel by viewModels<MoviesViewModel>()
     private val moviesAdapter = MoviesAdapter(::onMovieClicked)
 
+    private val connectivityManager by lazy {
+        context?.getSystemService(ConnectivityManager::class.java) as ConnectivityManager
+    }
+    private var networkCallback: ConnectivityManager.NetworkCallback? = null
+    private var wasPreviouslyConnected = true
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        wasPreviouslyConnected = isNetworkAvailable()
+    }
+    
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        observeLiveData()
         setupRecyclerView()
         setupSwipeRefresh()
+        observeLiveData()
     }
 
     private fun setupRecyclerView() {
@@ -69,5 +84,56 @@ class MoviesFragment : BindingFragment<FragmentMoviesBinding>() {
                 movie
             )
         )
+    }
+
+    private fun monitorNetworkAvailability() {
+
+        val networkRequest = NetworkRequest.Builder()
+            .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+            .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
+            .build()
+
+        networkCallback = object : ConnectivityManager.NetworkCallback() {
+            override fun onAvailable(network: Network) {
+                super.onAvailable(network)
+                if (wasPreviouslyConnected) {
+                    return
+                }
+                context?.showLongToast(getString(R.string.network_restored))
+                viewModel.fetchMovies()
+            }
+
+            override fun onLost(network: Network) {
+                super.onLost(network)
+                context?.showLongToast(getString(R.string.no_internet_connection))
+                wasPreviouslyConnected = false
+            }
+        }.also {
+            connectivityManager.registerNetworkCallback(networkRequest, it)
+        }
+    }
+
+    private fun isNetworkAvailable(): Boolean {
+        val network = connectivityManager.activeNetwork ?: return false
+        val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+        return when {
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+            else -> false
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        networkCallback?.let {
+            connectivityManager.unregisterNetworkCallback(it)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        monitorNetworkAvailability()
     }
 }
