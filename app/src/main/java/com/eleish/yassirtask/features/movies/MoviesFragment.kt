@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.eleish.entities.Movie
 import com.eleish.yassirtask.R
 import com.eleish.yassirtask.core.BindingFragment
@@ -52,6 +53,6 @@ class MoviesFragment : BindingFragment<FragmentMoviesBinding>() {
     }
 
     private fun onMovieClicked(movie: Movie) {
-        // TODO: Navigate to movie details
+        findNavController().navigate(MoviesFragmentDirections.actionMoviesFragmentToMovieDetailsFragment(movie))
     }
 }

@@ -14,6 +14,8 @@ data class MovieModel(
     val releaseDate: Date,
     @SerializedName("vote_average")
     val voteAverage: Float,
+    @SerializedName("overview")
+    val overview: String,
     @SerializedName("poster_path")
     val posterPath: String
 )
@@ -28,6 +30,7 @@ fun MovieModel.toMovie(): Movie {
         title,
         releaseYear,
         rating,
+        overview,
         "https://image.tmdb.org/t/p/w500$posterPath" // TODO: Implement full poster url building
     )
 }

@@ -2,6 +2,7 @@
 plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
+    alias(libs.plugins.androidx.navigation.safeargs.kotlin)
 }
 
 android {
@@ -51,6 +52,7 @@ dependencies {
 
     implementation(project(":domain")) // TODO: Could this be added to the version catalog?
     implementation(project(":data")) // TODO: Remove after adding HILT DI
+    implementation(project(":entities")) // TODO: Remove after adding HILT DI
 
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
