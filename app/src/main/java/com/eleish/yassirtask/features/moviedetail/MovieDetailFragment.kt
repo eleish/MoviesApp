@@ -1,6 +1,7 @@
 package com.eleish.yassirtask.features.moviedetail
 
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,7 +30,10 @@ class MovieDetailFragment : BindingFragment<FragmentMovieDetailBinding>() {
             movieTitleTv.text = movie.title
             releaseYearTv.text = movie.releaseYear.toString()
             ratingRb.rating = movie.rating
-            overviewTv.text = movie.overview
+            overviewTv.apply {
+                text = movie.overview
+                movementMethod = ScrollingMovementMethod()
+            }
             moviePosterIv.load(movie.getPosterUrl(PosterSize.ORIGINAL))
         }
     }
