@@ -11,6 +11,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.eleish.entities.Movie
 import com.eleish.yassirtask.R
@@ -20,6 +23,7 @@ import com.eleish.yassirtask.core.isNetworkAvailable
 import com.eleish.yassirtask.core.showLongToast
 import com.eleish.yassirtask.databinding.FragmentMoviesBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MoviesFragment : BindingFragment<FragmentMoviesBinding>() {
@@ -69,9 +73,13 @@ class MoviesFragment : BindingFragment<FragmentMoviesBinding>() {
             loading.observe(viewLifecycleOwner) {
                 binding.loadingPb.isVisible = it
             }
-            error.observe(viewLifecycleOwner) {
-                val message = it ?: getString(R.string.something_went_wrong)
-                context?.showLongToast(message)
+            lifecycleScope.launch {
+                repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    error.collect {
+                        val message = it ?: getString(R.string.something_went_wrong)
+                        context?.showLongToast(message)
+                    }
+                }
             }
             movies.observe(viewLifecycleOwner) {
                 moviesAdapter.submitList(it)

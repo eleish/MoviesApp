@@ -8,8 +8,10 @@ import com.eleish.domain.usecases.GetMoviesParams
 import com.eleish.domain.usecases.GetMoviesUseCase
 import com.eleish.entities.Movie
 import com.eleish.entities.Result
-import com.eleish.yassirtask.core.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,12 +20,11 @@ class MoviesViewModel @Inject constructor(
     private val getMoviesUseCase: GetMoviesUseCase
 ) : ViewModel() {
 
+    private val _error = MutableSharedFlow<String?>()
+    val error: Flow<String?> = _error
+
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> = _loading
-
-    // TODO: Consider replacing with MutableSharedFLow
-    private val _error = SingleLiveEvent<String>()
-    val error: LiveData<String> = _error
 
     private val _movies = MutableLiveData<List<Movie>>()
     val movies: LiveData<List<Movie>> = _movies
@@ -47,7 +48,9 @@ class MoviesViewModel @Inject constructor(
             _loading.postValue(true)
 
             when (val result = getMoviesUseCase.invoke(GetMoviesParams(page))) {
-                is Result.Failure -> _error.postValue(result.exception.message)
+                is Result.Failure -> {
+                    _error.emit(result.exception.message)
+                }
                 is Result.Success -> {
                     page = result.data.page + 1
 
