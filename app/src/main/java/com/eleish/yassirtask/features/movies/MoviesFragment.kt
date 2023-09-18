@@ -49,7 +49,7 @@ class MoviesFragment : BindingFragment<FragmentMoviesBinding>() {
 
         setupRecyclerView()
         setupSwipeRefresh()
-        observeLiveData()
+        observeData()
     }
 
     private fun setupRecyclerView() {
@@ -68,21 +68,27 @@ class MoviesFragment : BindingFragment<FragmentMoviesBinding>() {
         }
     }
 
-    private fun observeLiveData() {
-        with(viewModel) {
-            loading.observe(viewLifecycleOwner) {
-                binding.loadingPb.isVisible = it
-            }
-            lifecycleScope.launch {
-                repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    error.collect {
+    private fun observeData() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.loading.collect {
+                        binding.loadingPb.isVisible = it
+                    }
+                }
+
+                launch {
+                    viewModel.movies.collect {
+                        moviesAdapter.submitList(it)
+                    }
+                }
+
+                launch {
+                    viewModel.error.collect {
                         val message = it ?: getString(R.string.something_went_wrong)
                         context?.showLongToast(message)
                     }
                 }
-            }
-            movies.observe(viewLifecycleOwner) {
-                moviesAdapter.submitList(it)
             }
         }
     }
