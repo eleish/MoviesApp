@@ -15,6 +15,9 @@ okhttp = "4.11.0"
 retrofit = "2.9.0"
 hilt = "2.47"
 swiperefreshlayout = "1.1.0"
+compose-bom = "2023.08.00"
+compose-compiler = "1.5.2"
+compose-activity = "1.7.2"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -28,6 +31,7 @@ constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayo
 navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }
 navigation-extensions = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation" }
 coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 okhttp-client = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 retrofit-client = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
@@ -35,6 +39,11 @@ retrofit-converter-json = { group = "com.squareup.retrofit2", name = "converter-
 com-google-dagger-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 com-google-dagger-hilt-android-complier = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 androidx-swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swiperefreshlayout" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom"}
+androidx-compose-material = { group = "androidx.compose.material3", name = "material3"}
+androidx-compose-ui-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview"}
+androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling"}
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose"}
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }

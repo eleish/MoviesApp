@@ -39,6 +39,10 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
     }
     kotlinOptions {
         jvmTarget = "1.8"
@@ -56,6 +60,15 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":entities"))
 
+    val composeBom = platform(libs.androidx.compose.bom)
+    implementation(composeBom)
+
+    implementation(libs.androidx.compose.ui.preview)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.material)
+
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.appcompat)
@@ -64,9 +77,12 @@ dependencies {
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.extensions)
     implementation(libs.coil)
+    implementation(libs.coil.compose)
     implementation(libs.com.google.dagger.hilt.android)
+
     kapt(libs.com.google.dagger.hilt.android.complier)
     implementation(libs.androidx.swiperefreshlayout)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
