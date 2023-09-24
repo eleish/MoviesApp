@@ -57,7 +57,7 @@ fun MoviesScreen(viewModel: MoviesViewModel = viewModel(), onNavigateToDetails: 
 
     val connected by connectivityState()
 
-    val movies = viewModel.getMovies().collectAsLazyPagingItems()
+    val movies = viewModel.movies.collectAsLazyPagingItems()
 
     val refreshState = rememberPullRefreshState(refreshing = refreshing, onRefresh = {
         refreshing = true
