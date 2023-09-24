@@ -33,13 +33,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.eleish.entities.Movie
 import com.eleish.entities.PosterSize
 import com.eleish.yassirtask.R
 import com.eleish.yassirtask.core.showLongToast
-import com.eleish.yassirtask.features.compose.Routes
 import com.eleish.yassirtask.features.compose.components.connectivityState
 import com.eleish.yassirtask.features.compose.components.pulltorefresh.PullRefreshIndicator
 import com.eleish.yassirtask.features.compose.components.pulltorefresh.pullRefresh
@@ -49,7 +47,7 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun MoviesScreen(navController: NavController, viewModel: MoviesViewModel = viewModel()) {
+fun MoviesScreen(viewModel: MoviesViewModel = viewModel(), onNavigateToDetails: (Movie) -> Unit) {
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
@@ -76,8 +74,7 @@ fun MoviesScreen(navController: NavController, viewModel: MoviesViewModel = view
         LazyColumn(Modifier.fillMaxSize()) {
             items(movies, key = { it.id }) {
                 MovieItem(movie = it) { movie ->
-                    navController.currentBackStackEntry?.savedStateHandle?.set("movie", movie)
-                    navController.navigate(Routes.MOVIE_DETAILS)
+                    onNavigateToDetails.invoke(movie)
                 }
             }
         }

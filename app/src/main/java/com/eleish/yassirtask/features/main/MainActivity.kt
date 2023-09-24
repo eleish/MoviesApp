@@ -25,7 +25,10 @@ class MainActivity : ComponentActivity() {
             NavHost(navController = navController, startDestination = Routes.MOVIES) {
                 composable(Routes.MOVIES) {
                     val viewModel by viewModels<MoviesViewModel>()
-                    MoviesScreen(navController = navController, viewModel = viewModel)
+                    MoviesScreen(viewModel = viewModel) {
+                        navController.currentBackStackEntry?.savedStateHandle?.set("movie", it)
+                        navController.navigate(Routes.MOVIE_DETAILS)
+                    }
                 }
                 composable(
                     route = Routes.MOVIE_DETAILS,
