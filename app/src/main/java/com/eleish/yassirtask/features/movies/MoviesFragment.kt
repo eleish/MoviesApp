@@ -44,6 +44,7 @@ import com.eleish.yassirtask.features.compose.components.pulltorefresh.PullRefre
 import com.eleish.yassirtask.features.compose.components.pulltorefresh.pullRefresh
 import com.eleish.yassirtask.features.compose.components.pulltorefresh.rememberPullRefreshState
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
@@ -58,7 +59,6 @@ fun MoviesScreen(viewModel: MoviesViewModel = viewModel(), onNavigateToDetails: 
 
     val loading by viewModel.loading.collectAsStateWithLifecycle(initialValue = false)
     val movies by viewModel.movies.collectAsStateWithLifecycle(initialValue = emptyList())
-    val error by viewModel.error.collectAsStateWithLifecycle(initialValue = null)
     val connected by connectivityState()
 
     val refreshState = rememberPullRefreshState(refreshing = refreshing, onRefresh = {
@@ -103,9 +103,10 @@ fun MoviesScreen(viewModel: MoviesViewModel = viewModel(), onNavigateToDetails: 
             }
         }
 
-        LaunchedEffect(key1 = error) {
-            if (error != null)
-                context.showLongToast(error ?: context.getString(R.string.something_went_wrong))
+        LaunchedEffect(Unit) {
+            viewModel.error.collectLatest {
+                context.showLongToast(it ?: context.getString(R.string.something_went_wrong))
+            }
         }
     }
 }
