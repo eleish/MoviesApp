@@ -7,7 +7,6 @@ import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.widget.Toast
 import androidx.annotation.StringRes
-import com.eleish.yassirtask.R
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 
@@ -50,13 +49,11 @@ fun Context.observeNetworkAvailabilityAsFlow() = callbackFlow {
             if (wasPreviouslyConnected) {
                 return
             }
-            showLongToast(R.string.network_restored)
             trySend(true)
         }
 
         override fun onLost(network: Network) {
             super.onLost(network)
-            showLongToast(R.string.no_internet_connection)
             wasPreviouslyConnected = false
             trySend(false)
         }

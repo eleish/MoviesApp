@@ -40,6 +40,7 @@ import com.eleish.entities.PosterSize
 import com.eleish.yassirtask.R
 import com.eleish.yassirtask.core.showLongToast
 import com.eleish.yassirtask.features.compose.Routes
+import com.eleish.yassirtask.features.compose.components.connectivityState
 import com.eleish.yassirtask.features.compose.components.pulltorefresh.PullRefreshIndicator
 import com.eleish.yassirtask.features.compose.components.pulltorefresh.pullRefresh
 import com.eleish.yassirtask.features.compose.components.pulltorefresh.rememberPullRefreshState
@@ -59,6 +60,7 @@ fun MoviesScreen(navController: NavController, viewModel: MoviesViewModel = view
     val loading by viewModel.loading.collectAsStateWithLifecycle(initialValue = false)
     val movies by viewModel.movies.collectAsStateWithLifecycle(initialValue = emptyList())
     val error by viewModel.error.collectAsStateWithLifecycle(initialValue = null)
+    val connected by connectivityState()
 
     val refreshState = rememberPullRefreshState(refreshing = refreshing, onRefresh = {
         refreshing = true
@@ -90,6 +92,18 @@ fun MoviesScreen(navController: NavController, viewModel: MoviesViewModel = view
             CircularProgressIndicator(
                 modifier = Modifier.align(Alignment.Center)
             )
+
+        if (connected.not()) {
+            Surface(color = Color.Red, modifier = Modifier.align(Alignment.BottomCenter)) {
+                Text(
+                    text = context.getString(R.string.no_internet_connection),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    color = Color.White
+                )
+            }
+        }
 
         // TODO: Not working properly
         if (error != null)
