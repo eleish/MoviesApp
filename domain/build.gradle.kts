@@ -39,6 +39,8 @@ dependencies {
 
     api(project(":entities"))
 
+    implementation(libs.androidx.paging)
+
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)

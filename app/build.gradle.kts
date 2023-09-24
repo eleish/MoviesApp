@@ -68,6 +68,8 @@ dependencies {
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material)
+    implementation(libs.androidx.paging)
+    implementation(libs.androidx.paging.compose)
 
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)

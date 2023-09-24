@@ -9,8 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -18,7 +18,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,19 +31,18 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.paging.LoadState
+import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import com.eleish.entities.Movie
 import com.eleish.entities.PosterSize
 import com.eleish.yassirtask.R
-import com.eleish.yassirtask.core.showLongToast
 import com.eleish.yassirtask.features.compose.components.connectivityState
 import com.eleish.yassirtask.features.compose.components.pulltorefresh.PullRefreshIndicator
 import com.eleish.yassirtask.features.compose.components.pulltorefresh.pullRefresh
 import com.eleish.yassirtask.features.compose.components.pulltorefresh.rememberPullRefreshState
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
@@ -57,14 +55,13 @@ fun MoviesScreen(viewModel: MoviesViewModel = viewModel(), onNavigateToDetails: 
         mutableStateOf(false)
     }
 
-    val loading by viewModel.loading.collectAsStateWithLifecycle(initialValue = false)
-    val movies by viewModel.movies.collectAsStateWithLifecycle(initialValue = emptyList())
     val connected by connectivityState()
+
+    val movies = viewModel.getMovies().collectAsLazyPagingItems()
 
     val refreshState = rememberPullRefreshState(refreshing = refreshing, onRefresh = {
         refreshing = true
-        viewModel.clearMovies()
-        viewModel.fetchMovies()
+        movies.refresh()
         coroutineScope.launch {
             delay(500)
             refreshing = false
@@ -73,10 +70,56 @@ fun MoviesScreen(viewModel: MoviesViewModel = viewModel(), onNavigateToDetails: 
 
     Box(modifier = Modifier.pullRefresh(state = refreshState)) {
         LazyColumn(Modifier.fillMaxSize()) {
-            items(movies, key = { it.id }) {
-                MovieItem(movie = it) { movie ->
+            items(count = movies.itemCount) {
+                val movie = movies[it] ?: return@items
+                MovieItem(movie = movie) {
                     onNavigateToDetails.invoke(movie)
                 }
+            }
+
+            when (val state = movies.loadState.refresh) {
+                LoadState.Loading -> {
+                    item {
+                        Box(modifier = Modifier.fillParentMaxSize()) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.align(Alignment.Center)
+                            )
+                        }
+                    }
+                }
+
+                is LoadState.Error -> item {
+                    Text(
+                        text = state.error.message
+                            ?: context.getString(R.string.something_went_wrong)
+                    )
+                }
+
+                is LoadState.NotLoading -> Unit
+            }
+
+            when (val state = movies.loadState.append) {
+                LoadState.Loading -> {
+                    item {
+                        Box(modifier = Modifier.fillMaxWidth()) {
+                            CircularProgressIndicator(
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .align(Alignment.BottomCenter)
+                                    .size(24.dp)
+                            )
+                        }
+                    }
+                }
+
+                is LoadState.Error -> item {
+                    Text(
+                        text = state.error.message
+                            ?: context.getString(R.string.something_went_wrong)
+                    )
+                }
+
+                is LoadState.NotLoading -> Unit
             }
         }
 
@@ -85,11 +128,6 @@ fun MoviesScreen(viewModel: MoviesViewModel = viewModel(), onNavigateToDetails: 
             refreshing = refreshing,
             state = refreshState
         )
-
-        if (loading)
-            CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center)
-            )
 
         if (connected.not()) {
             Surface(color = Color.Red, modifier = Modifier.align(Alignment.BottomCenter)) {
@@ -100,12 +138,6 @@ fun MoviesScreen(viewModel: MoviesViewModel = viewModel(), onNavigateToDetails: 
                         .padding(8.dp),
                     color = Color.White
                 )
-            }
-        }
-
-        LaunchedEffect(Unit) {
-            viewModel.error.collectLatest {
-                context.showLongToast(it ?: context.getString(R.string.something_went_wrong))
             }
         }
     }
