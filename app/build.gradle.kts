@@ -71,11 +71,13 @@ dependencies {
 
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.lifecycle.runtime.compose)
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.constraintlayout)
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.extensions)
+    implementation(libs.navigation.compose)
     implementation(libs.coil)
     implementation(libs.coil.compose)
     implementation(libs.com.google.dagger.hilt.android)

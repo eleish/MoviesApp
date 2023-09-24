@@ -1,14 +1,42 @@
 package com.eleish.yassirtask.features.main
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import com.eleish.yassirtask.R
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.viewModels
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.eleish.entities.Movie
+import com.eleish.yassirtask.features.compose.Routes
+import com.eleish.yassirtask.features.moviedetail.MovieDetailsScreen
+import com.eleish.yassirtask.features.movies.MoviesScreen
+import com.eleish.yassirtask.features.movies.MoviesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+
+        setContent {
+            val navController = rememberNavController()
+
+            NavHost(navController = navController, startDestination = Routes.MOVIES) {
+                composable(Routes.MOVIES) {
+                    val viewModel by viewModels<MoviesViewModel>()
+                    MoviesScreen(navController = navController, viewModel = viewModel)
+                }
+                composable(
+                    route = Routes.MOVIE_DETAILS,
+                ) {
+                    val movie =
+                        navController.previousBackStackEntry?.savedStateHandle?.get<Movie>("movie")
+                            ?: return@composable
+
+                    MovieDetailsScreen(movie = movie)
+                }
+            }
+        }
     }
 }

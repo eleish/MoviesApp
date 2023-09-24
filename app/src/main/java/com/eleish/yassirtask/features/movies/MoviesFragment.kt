@@ -1,13 +1,6 @@
 package com.eleish.yassirtask.features.movies
 
-import android.net.ConnectivityManager
-import android.net.Network
-import android.net.NetworkCapabilities
-import android.net.NetworkRequest
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
@@ -21,155 +14,147 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.view.isVisible
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.findNavController
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.eleish.entities.Movie
 import com.eleish.entities.PosterSize
 import com.eleish.yassirtask.R
-import com.eleish.yassirtask.core.BindingFragment
-import com.eleish.yassirtask.core.isNetworkAvailable
 import com.eleish.yassirtask.core.showLongToast
-import com.eleish.yassirtask.databinding.FragmentMoviesBinding
-import dagger.hilt.android.AndroidEntryPoint
+import com.eleish.yassirtask.features.compose.Routes
+import com.eleish.yassirtask.features.compose.components.pulltorefresh.PullRefreshIndicator
+import com.eleish.yassirtask.features.compose.components.pulltorefresh.pullRefresh
+import com.eleish.yassirtask.features.compose.components.pulltorefresh.rememberPullRefreshState
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@AndroidEntryPoint
-class MoviesFragment : BindingFragment<FragmentMoviesBinding>() {
-    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentMoviesBinding
-        get() = FragmentMoviesBinding::inflate
 
-    private val viewModel by viewModels<MoviesViewModel>()
-    private val moviesAdapter = MoviesAdapter(::onMovieClicked)
+@Composable
+fun MoviesScreen(navController: NavController, viewModel: MoviesViewModel = viewModel()) {
+    val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
 
-    private val connectivityManager by lazy {
-        context?.getSystemService(ConnectivityManager::class.java) as ConnectivityManager
-    }
-    private var networkCallback: ConnectivityManager.NetworkCallback? = null
-    private var wasPreviouslyConnected = true
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        wasPreviouslyConnected = context?.isNetworkAvailable() ?: false
+    var refreshing by remember {
+        mutableStateOf(false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    val loading by viewModel.loading.collectAsStateWithLifecycle(initialValue = false)
+    val movies by viewModel.movies.collectAsStateWithLifecycle(initialValue = emptyList())
+    val error by viewModel.error.collectAsStateWithLifecycle(initialValue = null)
 
-        setupRecyclerView(emptyList())
-        setupSwipeRefresh()
-        observeData()
-    }
+    val state = rememberPullRefreshState(refreshing = refreshing, onRefresh = {
+        refreshing = true
+        viewModel.clearMovies()
+        viewModel.fetchMovies()
+        coroutineScope.launch {
+            delay(500)
+            refreshing = false
+        }
+    })
 
-    private fun setupRecyclerView(movies: List<Movie>) {
-        binding.moviesComposeView.setContent {
-            LazyColumn(Modifier.fillMaxSize()) {
-                items(movies, key = { it.id }) {
-                    MovieItem(movie = it, onClick = ::onMovieClicked)
+    Box(modifier = Modifier.pullRefresh(state = state)) {
+        LazyColumn(Modifier.fillMaxSize()) {
+            items(movies, key = { it.id }) {
+                MovieItem(movie = it) { movie ->
+                    navController.currentBackStackEntry?.savedStateHandle?.set("movie", movie)
+                    navController.navigate(Routes.MOVIE_DETAILS)
                 }
             }
         }
-//        binding.moviesRv.addOnBottomReachedListener {
-//            Log.d(MoviesFragment::class.java.simpleName, "End of RV reached")
-//            viewModel.fetchMovies()
-//        }
-//        binding.moviesRv.adapter = moviesAdapter
-    }
 
-    private fun setupSwipeRefresh() {
-        binding.swipeRefreshLayout.setOnRefreshListener {
-            binding.swipeRefreshLayout.isRefreshing = false
-            viewModel.clearMovies()
-            viewModel.fetchMovies()
-        }
-    }
-
-    private fun observeData() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch {
-                    viewModel.loading.collect {
-                        binding.loadingPb.isVisible = it
-                    }
-                }
-
-                launch {
-                    viewModel.movies.collect {
-                        setupRecyclerView(it)
-                    }
-                }
-
-                launch {
-                    viewModel.error.collect {
-                        val message = it ?: getString(R.string.something_went_wrong)
-                        context?.showLongToast(message)
-                    }
-                }
-            }
-        }
-    }
-
-    private fun onMovieClicked(movie: Movie) {
-        findNavController().navigate(
-            MoviesFragmentDirections.actionMoviesFragmentToMovieDetailsFragment(
-                movie
-            )
+        PullRefreshIndicator(
+            modifier = Modifier.align(Alignment.TopCenter),
+            refreshing = refreshing,
+            state = state
         )
-    }
 
-    private fun monitorNetworkAvailability() {
+        if (loading)
+            CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center)
+            )
 
-        val networkRequest = NetworkRequest.Builder()
-            .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
-            .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
-            .build()
+        // TODO: Not working properly
+        if (error != null)
+            context.showLongToast(error ?: context.getString(R.string.something_went_wrong))
 
-        networkCallback = object : ConnectivityManager.NetworkCallback() {
-            override fun onAvailable(network: Network) {
-                super.onAvailable(network)
-                if (wasPreviouslyConnected) {
-                    return
-                }
-                context?.showLongToast(R.string.network_restored)
-                viewModel.fetchMovies()
-            }
-
-            override fun onLost(network: Network) {
-                super.onLost(network)
-                context?.showLongToast(R.string.no_internet_connection)
-                wasPreviouslyConnected = false
-            }
-        }.also {
-            connectivityManager.registerNetworkCallback(networkRequest, it)
-        }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        networkCallback?.let {
-            connectivityManager.unregisterNetworkCallback(it)
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        monitorNetworkAvailability()
     }
 }
+
+//@AndroidEntryPoint
+//class MoviesFragment : BindingFragment<FragmentMoviesBinding>() {
+//    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentMoviesBinding
+//        get() = FragmentMoviesBinding::inflate
+//
+//
+//    private val connectivityManager by lazy {
+//        context?.getSystemService(ConnectivityManager::class.java) as ConnectivityManager
+//    }
+//    private var networkCallback: ConnectivityManager.NetworkCallback? = null
+//    private var wasPreviouslyConnected = true
+//
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        wasPreviouslyConnected = context?.isNetworkAvailable() ?: false
+//    }
+//
+//    private fun monitorNetworkAvailability() {
+//
+//        val networkRequest = NetworkRequest.Builder()
+//            .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+//            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+//            .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
+//            .build()
+//
+//        networkCallback = object : ConnectivityManager.NetworkCallback() {
+//            override fun onAvailable(network: Network) {
+//                super.onAvailable(network)
+//                if (wasPreviouslyConnected) {
+//                    return
+//                }
+//                context?.showLongToast(R.string.network_restored)
+//                viewModel.fetchMovies()
+//            }
+//
+//            override fun onLost(network: Network) {
+//                super.onLost(network)
+//                context?.showLongToast(R.string.no_internet_connection)
+//                wasPreviouslyConnected = false
+//            }
+//        }.also {
+//            connectivityManager.registerNetworkCallback(networkRequest, it)
+//        }
+//    }
+//
+//    override fun onDestroyView() {
+//        super.onDestroyView()
+//        networkCallback?.let {
+//            connectivityManager.unregisterNetworkCallback(it)
+//        }
+//    }
+//
+//    override fun onResume() {
+//        super.onResume()
+//        monitorNetworkAvailability()
+//    }
+//}
 
 @Composable
 fun MovieItem(movie: Movie, modifier: Modifier = Modifier, onClick: (Movie) -> Unit) {

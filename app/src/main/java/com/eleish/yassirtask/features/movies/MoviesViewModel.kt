@@ -7,6 +7,7 @@ import com.eleish.domain.usecases.GetMoviesUseCase
 import com.eleish.entities.Movie
 import com.eleish.entities.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -46,6 +47,7 @@ class MoviesViewModel @Inject constructor(
 
         viewModelScope.launch {
             _loading.emit(true)
+            delay(500)
 
             when (val result = getMoviesUseCase.invoke(GetMoviesParams(page))) {
                 is Result.Failure -> {

@@ -1,40 +1,89 @@
 package com.eleish.yassirtask.features.moviedetail
 
-import android.os.Bundle
-import android.text.method.ScrollingMovementMethod
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.navigation.fragment.navArgs
-import coil.load
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import com.eleish.entities.Movie
 import com.eleish.entities.PosterSize
-import com.eleish.yassirtask.core.BindingFragment
-import com.eleish.yassirtask.databinding.FragmentMovieDetailBinding
+import com.eleish.yassirtask.features.compose.theme.BlackSemiTransparent
 
-class MovieDetailFragment : BindingFragment<FragmentMovieDetailBinding>() {
-    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentMovieDetailBinding
-        get() = FragmentMovieDetailBinding::inflate
 
-    private val args by navArgs<MovieDetailFragmentArgs>()
+@Composable
+fun MovieDetailsScreen(movie: Movie) {
+    Box {
+        AsyncImage(
+            model = movie.getPosterUrl(PosterSize.ORIGINAL),
+            contentDescription = "Movie Poster",
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        populateUI()
-    }
-
-    private fun populateUI() {
-        val movie = args.movie
-
-        with(binding) {
-            movieTitleTv.text = movie.title
-            releaseYearTv.text = movie.releaseYear.toString()
-            ratingRb.rating = movie.rating
-            overviewTv.apply {
-                text = movie.overview
-                movementMethod = ScrollingMovementMethod()
+        Surface(
+            color = BlackSemiTransparent,
+            modifier = Modifier
+                .align(Alignment.Center)
+                .fillMaxWidth(0.7f)
+                .fillMaxHeight(0.65f)
+        ) {
+            Column {
+                Text(
+                    text = movie.title,
+                    color = Color.White,
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp)
+                )
+                Text(
+                    text = movie.releaseYear.toString(),
+                    color = Color.White,
+                    modifier = Modifier.padding(start = 16.dp)
+                )
+                Text(
+                    text = "Rating goes here",
+                    color = Color.White,
+                    modifier = Modifier.padding(start = 16.dp, top = 16.dp)
+                )
+                Text(
+                    text = movie.overview + movie.overview + movie.overview,
+                    color = Color.White,
+                    modifier = Modifier
+                        .padding(start = 16.dp, top = 16.dp)
+                        .verticalScroll(rememberScrollState())
+                )
             }
-            moviePosterIv.load(movie.getPosterUrl(PosterSize.ORIGINAL))
         }
     }
+}
+
+@Preview
+@Composable
+fun MovieDetailsPreview() {
+    MovieDetailsScreen(
+        movie = Movie(
+            id = 0,
+            title = "Talk to Me",
+            releaseYear = 1996,
+            rating = 3.8f,
+            overview = "",
+            posterBaseUrl = "https://image.tmdb.org/t/p/",
+            posterPath = "/kdPMUMJzyYAc4roD52qavX0nLIC.jpg"
+        )
+    )
 }
