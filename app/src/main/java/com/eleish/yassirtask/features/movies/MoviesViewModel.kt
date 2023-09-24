@@ -1,23 +1,27 @@
 package com.eleish.yassirtask.features.movies
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.eleish.domain.usecases.GetMoviesParams
 import com.eleish.domain.usecases.GetMoviesUseCase
 import com.eleish.entities.Movie
 import com.eleish.entities.Result
+import com.eleish.yassirtask.core.observeNetworkAvailabilityAsFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MoviesViewModel @Inject constructor(
+    application: Application,
     private val getMoviesUseCase: GetMoviesUseCase
-) : ViewModel() {
+) : AndroidViewModel(application) {
 
     private val _error = MutableSharedFlow<String?>()
     val error: Flow<String?> = _error
@@ -31,6 +35,14 @@ class MoviesViewModel @Inject constructor(
     private var page = 1
 
     init {
+        viewModelScope.launch {
+            application.observeNetworkAvailabilityAsFlow().collectLatest {
+                if (it) {
+                    fetchMovies()
+                }
+            }
+        }
+
         fetchMovies()
     }
 

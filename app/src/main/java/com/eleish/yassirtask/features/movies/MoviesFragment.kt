@@ -60,7 +60,7 @@ fun MoviesScreen(navController: NavController, viewModel: MoviesViewModel = view
     val movies by viewModel.movies.collectAsStateWithLifecycle(initialValue = emptyList())
     val error by viewModel.error.collectAsStateWithLifecycle(initialValue = null)
 
-    val state = rememberPullRefreshState(refreshing = refreshing, onRefresh = {
+    val refreshState = rememberPullRefreshState(refreshing = refreshing, onRefresh = {
         refreshing = true
         viewModel.clearMovies()
         viewModel.fetchMovies()
@@ -70,7 +70,7 @@ fun MoviesScreen(navController: NavController, viewModel: MoviesViewModel = view
         }
     })
 
-    Box(modifier = Modifier.pullRefresh(state = state)) {
+    Box(modifier = Modifier.pullRefresh(state = refreshState)) {
         LazyColumn(Modifier.fillMaxSize()) {
             items(movies, key = { it.id }) {
                 MovieItem(movie = it) { movie ->
@@ -83,7 +83,7 @@ fun MoviesScreen(navController: NavController, viewModel: MoviesViewModel = view
         PullRefreshIndicator(
             modifier = Modifier.align(Alignment.TopCenter),
             refreshing = refreshing,
-            state = state
+            state = refreshState
         )
 
         if (loading)
@@ -97,64 +97,6 @@ fun MoviesScreen(navController: NavController, viewModel: MoviesViewModel = view
 
     }
 }
-
-//@AndroidEntryPoint
-//class MoviesFragment : BindingFragment<FragmentMoviesBinding>() {
-//    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentMoviesBinding
-//        get() = FragmentMoviesBinding::inflate
-//
-//
-//    private val connectivityManager by lazy {
-//        context?.getSystemService(ConnectivityManager::class.java) as ConnectivityManager
-//    }
-//    private var networkCallback: ConnectivityManager.NetworkCallback? = null
-//    private var wasPreviouslyConnected = true
-//
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        wasPreviouslyConnected = context?.isNetworkAvailable() ?: false
-//    }
-//
-//    private fun monitorNetworkAvailability() {
-//
-//        val networkRequest = NetworkRequest.Builder()
-//            .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-//            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
-//            .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
-//            .build()
-//
-//        networkCallback = object : ConnectivityManager.NetworkCallback() {
-//            override fun onAvailable(network: Network) {
-//                super.onAvailable(network)
-//                if (wasPreviouslyConnected) {
-//                    return
-//                }
-//                context?.showLongToast(R.string.network_restored)
-//                viewModel.fetchMovies()
-//            }
-//
-//            override fun onLost(network: Network) {
-//                super.onLost(network)
-//                context?.showLongToast(R.string.no_internet_connection)
-//                wasPreviouslyConnected = false
-//            }
-//        }.also {
-//            connectivityManager.registerNetworkCallback(networkRequest, it)
-//        }
-//    }
-//
-//    override fun onDestroyView() {
-//        super.onDestroyView()
-//        networkCallback?.let {
-//            connectivityManager.unregisterNetworkCallback(it)
-//        }
-//    }
-//
-//    override fun onResume() {
-//        super.onResume()
-//        monitorNetworkAvailability()
-//    }
-//}
 
 @Composable
 fun MovieItem(movie: Movie, modifier: Modifier = Modifier, onClick: (Movie) -> Unit) {
