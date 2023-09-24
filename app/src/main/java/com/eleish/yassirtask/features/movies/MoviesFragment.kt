@@ -18,6 +18,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -102,10 +103,10 @@ fun MoviesScreen(viewModel: MoviesViewModel = viewModel(), onNavigateToDetails: 
             }
         }
 
-        // TODO: Not working properly
-        if (error != null)
-            context.showLongToast(error ?: context.getString(R.string.something_went_wrong))
-
+        LaunchedEffect(key1 = error) {
+            if (error != null)
+                context.showLongToast(error ?: context.getString(R.string.something_went_wrong))
+        }
     }
 }
 

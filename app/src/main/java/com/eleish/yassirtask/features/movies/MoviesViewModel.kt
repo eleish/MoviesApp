@@ -14,6 +14,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -69,11 +71,11 @@ class MoviesViewModel @Inject constructor(
                 is Result.Success -> {
                     page = result.data.page + 1
 
-                    val allMovies = _movies.value.toMutableList().apply {
-                        addAll(result.data.movies)
+                    _movies.update {
+                        it.toMutableList().apply {
+                            addAll(result.data.movies)
+                        }
                     }
-
-                    _movies.emit(allMovies)
                 }
             }
 
