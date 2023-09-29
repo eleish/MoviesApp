@@ -1,4 +1,4 @@
-package com.eleish.yassirtask.core
+package com.eleish.movies.core
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -1,4 +1,4 @@
-package com.eleish.yassirtask.features.movies
+package com.eleish.movies.features.movies
 
 import android.net.ConnectivityManager
 import android.net.Network
@@ -16,12 +16,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.eleish.entities.Movie
-import com.eleish.yassirtask.R
-import com.eleish.yassirtask.core.BindingFragment
-import com.eleish.yassirtask.core.addOnBottomReachedListener
-import com.eleish.yassirtask.core.isNetworkAvailable
-import com.eleish.yassirtask.core.showLongToast
-import com.eleish.yassirtask.databinding.FragmentMoviesBinding
+import com.eleish.movies.core.BindingFragment
+import com.eleish.movies.core.addOnBottomReachedListener
+import com.eleish.movies.core.isNetworkAvailable
+import com.eleish.movies.core.showLongToast
+import com.eleish.movies.R
+import com.eleish.movies.databinding.FragmentMoviesBinding
+import com.eleish.yassirtask.features.movies.MoviesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

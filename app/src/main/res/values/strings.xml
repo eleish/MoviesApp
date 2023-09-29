@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Yassir Task</string>
+    <string name="app_name">Movies</string>
     <string name="something_went_wrong">Something went wrong</string>
     <string name="no_internet_connection">No internet connection</string>
     <string name="network_restored">Network restored</string>

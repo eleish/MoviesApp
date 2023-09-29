@@ -1,4 +1,4 @@
-package com.eleish.yassirtask.core
+package com.eleish.movies.core
 
 import android.content.Context
 import android.net.ConnectivityManager

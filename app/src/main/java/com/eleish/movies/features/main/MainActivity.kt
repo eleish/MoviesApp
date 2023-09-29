@@ -1,8 +1,8 @@
-package com.eleish.yassirtask.features.main
+package com.eleish.movies.features.main
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.eleish.yassirtask.R
+import com.eleish.movies.R
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

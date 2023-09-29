@@ -1,4 +1,4 @@
-package com.eleish.yassirtask.features.moviedetail
+package com.eleish.movies.features.moviedetail
 
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.navArgs
 import coil.load
 import com.eleish.entities.PosterSize
-import com.eleish.yassirtask.core.BindingFragment
-import com.eleish.yassirtask.databinding.FragmentMovieDetailBinding
+import com.eleish.movies.core.BindingFragment
+import com.eleish.movies.databinding.FragmentMovieDetailBinding
 
 class MovieDetailFragment : BindingFragment<FragmentMovieDetailBinding>() {
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentMovieDetailBinding

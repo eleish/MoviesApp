@@ -1,4 +1,4 @@
-package com.eleish.yassirtask
+package com.eleish.movies
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

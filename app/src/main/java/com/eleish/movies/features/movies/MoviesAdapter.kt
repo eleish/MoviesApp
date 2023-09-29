@@ -1,4 +1,4 @@
-package com.eleish.yassirtask.features.movies
+package com.eleish.movies.features.movies
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.eleish.entities.Movie
 import com.eleish.entities.PosterSize
-import com.eleish.yassirtask.databinding.ItemMovieBinding
+import com.eleish.movies.databinding.ItemMovieBinding
 
 class MoviesAdapter(private val onItemClicked: (Movie) -> Unit) :
     ListAdapter<Movie, MoviesAdapter.ViewHolder>(DIFF_UTIL) {
