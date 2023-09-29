@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    namespace = "com.eleish.yassirtask"
+    namespace = "com.eleish.movies"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.eleish.yassirtask"
+        applicationId = "com.eleish.movies"
         minSdk = 29
         targetSdk = 33
         versionCode = 1

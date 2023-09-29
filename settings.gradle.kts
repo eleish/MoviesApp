@@ -13,7 +13,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Yassir Task"
+rootProject.name = "MoviesApp"
 include(":app")
 include(":domain")
 include(":entities")
