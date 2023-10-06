@@ -3,7 +3,7 @@ package com.eleish.movies.features.main
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
 
             NavHost(navController = navController, startDestination = Routes.MOVIES) {
                 composable(Routes.MOVIES) {
-                    val viewModel by viewModels<MoviesViewModel>()
+                    val viewModel = hiltViewModel<MoviesViewModel>()
                     MoviesScreen(viewModel = viewModel) {
                         navController.currentBackStackEntry?.savedStateHandle?.set("movie", it)
                         navController.navigate(Routes.MOVIE_DETAILS)

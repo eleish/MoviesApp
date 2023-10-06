@@ -1,6 +1,7 @@
 package com.eleish.movies.features.movies
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -14,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MoviesViewModel @Inject constructor(
     application: Application,
-    private val getMoviesUseCase: GetMoviesUseCase
+    getMoviesUseCase: GetMoviesUseCase
 ) : AndroidViewModel(application) {
 
     val movies: Flow<PagingData<Movie>> = getMoviesUseCase.invoke().cachedIn(viewModelScope)

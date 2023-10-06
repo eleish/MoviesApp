@@ -83,6 +83,7 @@ dependencies {
     implementation(libs.coil)
     implementation(libs.coil.compose)
     implementation(libs.com.google.dagger.hilt.android)
+    implementation(libs.androidx.hilt.compose)
 
     kapt(libs.com.google.dagger.hilt.android.complier)
     implementation(libs.androidx.swiperefreshlayout)
