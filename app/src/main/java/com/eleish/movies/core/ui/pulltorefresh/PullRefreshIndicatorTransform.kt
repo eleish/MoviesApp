@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.eleish.movies.features.compose.components.pulltorefresh
+package com.eleish.movies.core.ui.pulltorefresh
 
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.ui.Modifier

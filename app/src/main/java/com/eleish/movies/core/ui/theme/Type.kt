@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.eleish.movies.features.compose.theme
+package com.eleish.movies.core.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

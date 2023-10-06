@@ -22,8 +22,8 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.eleish.entities.Movie
 import com.eleish.entities.PosterSize
-import com.eleish.movies.features.compose.components.RatingBar
-import com.eleish.movies.features.compose.theme.BlackSemiTransparent
+import com.eleish.movies.core.ui.RatingBar
+import com.eleish.movies.core.ui.theme.BlackSemiTransparent
 
 
 @Composable

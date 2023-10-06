@@ -8,7 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.eleish.entities.Movie
-import com.eleish.movies.features.compose.Routes
+import com.eleish.movies.core.Routes
 import com.eleish.movies.features.moviedetail.MovieDetailsScreen
 import com.eleish.movies.features.movies.MoviesScreen
 import com.eleish.movies.features.movies.MoviesViewModel

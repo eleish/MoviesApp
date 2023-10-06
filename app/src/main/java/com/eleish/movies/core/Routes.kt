@@ -1,4 +1,4 @@
-package com.eleish.movies.features.compose
+package com.eleish.movies.core
 
 object Routes {
     const val MOVIES = "movies"

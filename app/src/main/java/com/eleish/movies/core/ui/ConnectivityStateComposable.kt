@@ -1,4 +1,4 @@
-package com.eleish.movies.features.compose.components
+package com.eleish.movies.core.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State

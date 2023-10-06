@@ -38,11 +38,11 @@ import coil.compose.AsyncImage
 import com.eleish.entities.Movie
 import com.eleish.entities.PosterSize
 import com.eleish.movies.R
-import com.eleish.movies.features.compose.components.RatingBar
-import com.eleish.movies.features.compose.components.connectivityState
-import com.eleish.movies.features.compose.components.pulltorefresh.PullRefreshIndicator
-import com.eleish.movies.features.compose.components.pulltorefresh.pullRefresh
-import com.eleish.movies.features.compose.components.pulltorefresh.rememberPullRefreshState
+import com.eleish.movies.core.ui.RatingBar
+import com.eleish.movies.core.ui.connectivityState
+import com.eleish.movies.core.ui.pulltorefresh.PullRefreshIndicator
+import com.eleish.movies.core.ui.pulltorefresh.pullRefresh
+import com.eleish.movies.core.ui.pulltorefresh.rememberPullRefreshState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

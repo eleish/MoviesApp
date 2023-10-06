@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.eleish.movies.features.compose.components.pulltorefresh
+package com.eleish.movies.core.ui.pulltorefresh
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
