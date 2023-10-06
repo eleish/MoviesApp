@@ -38,6 +38,7 @@ import coil.compose.AsyncImage
 import com.eleish.entities.Movie
 import com.eleish.entities.PosterSize
 import com.eleish.movies.R
+import com.eleish.movies.features.compose.components.RatingBar
 import com.eleish.movies.features.compose.components.connectivityState
 import com.eleish.movies.features.compose.components.pulltorefresh.PullRefreshIndicator
 import com.eleish.movies.features.compose.components.pulltorefresh.pullRefresh
@@ -177,7 +178,10 @@ fun MovieItem(movie: Movie, modifier: Modifier = Modifier, onClick: (Movie) -> U
                         text = movie.releaseYear.toString(),
                         modifier = Modifier.padding(start = 16.dp)
                     )
-                    Text(text = "Rating goes here", modifier = Modifier.padding(16.dp))
+                    RatingBar(
+                        rating = movie.rating,
+                        modifier = Modifier.padding(start = 16.dp, top = 16.dp)
+                    )
                 }
             }
         }

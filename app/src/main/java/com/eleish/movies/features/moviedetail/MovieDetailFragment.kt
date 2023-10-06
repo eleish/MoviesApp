@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.eleish.entities.Movie
 import com.eleish.entities.PosterSize
+import com.eleish.movies.features.compose.components.RatingBar
 import com.eleish.movies.features.compose.theme.BlackSemiTransparent
 
 
@@ -55,9 +56,8 @@ fun MovieDetailsScreen(movie: Movie) {
                     color = Color.White,
                     modifier = Modifier.padding(start = 16.dp)
                 )
-                Text(
-                    text = "Rating goes here",
-                    color = Color.White,
+                RatingBar(
+                    rating = movie.rating,
                     modifier = Modifier.padding(start = 16.dp, top = 16.dp)
                 )
                 Text(
